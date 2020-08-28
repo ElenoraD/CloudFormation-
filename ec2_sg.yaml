@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09 
+Resources: 
+#Resouce 1
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "CloudFormationSecurityGroup" 
+      GroupName: "CloudFormationSecurityGroup"
+      VpcId: "" #Enter VPC ID 
+      SecurityGroupIngress: 
+      - CidrIp: "0.0.0.0/0"
+        FromPort: 22
+        ToPort: 22
+        IpProtocol: "tcp"
+        Description: "ssh from everywhere"
+      - CidrIp: "0.0.0.0/0"
+        FromPort: 80
+        ToPort: 80 
+        IpProtocol: "tcp"
+        Description: "HTTP from everywhere"
+      Tags:
+      - Key: "Team"
+        Value: "MyEc2Instance"
+      - Key: "Env"
+        Value: "Dev"
+#Resource 2
+  MyEC2Instance:  
+    Type: AWS::EC2::Instance
+    DependsOn: MySecurityGroup
+    Properties:
+      ImageId: "ami-07c8bc5c1ce9598c3"
+      InstanceType: "t2.micro"
+      SubnetId: "" #Enter subnet id
+      SecurityGroupIds:
+      - Ref: MySecurityGroup
+      KeyName: "" #Enter ssh key name
+      Tags: 
+      - Key: "Name"
+        Value: "MyEc2Instance"
+      - Key: "Team"
+        Value: "MyEc2Instance"
+      - Key: "Env"
+        Value: "Dev"
+
+  
+         
